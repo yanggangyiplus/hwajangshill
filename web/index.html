@@ -39,7 +39,9 @@
 }
 
 /* 페이지 전체에 똥 커서 적용 (클릭 가능한 요소도 포함) */
-html, body, * { cursor: var(--cursor), auto !important; }
+/* 똥 커서는 본문 배경에만 적용한다.
+   모든 요소(지도·버튼 포함)에 !important로 걸면 마우스를 움직일 때마다 커서 이미지를 바꾸느라 브라우저가 불안정해질 수 있다 */
+body { cursor: var(--cursor), auto; }
 
 * { box-sizing: border-box; }
 html, body { min-height: 100%; }
@@ -337,6 +339,10 @@ tr:last-child td { border-bottom: 0; }
 }
 
 /* ---------- 웹 버전 추가 스타일 ---------- */
+/* 주소 뒤에 ?lite=1 을 붙이면 깜빡임·캐릭터·커스텀 커서를 모두 끈다 (오류 원인 확인용) */
+html.lite .runner { display: none; }
+html.lite body.alarm::before { animation: none; opacity: .25; }
+html.lite body { cursor: auto; }
 .notice { padding: 14px 16px; border-radius: var(--r-md); background: var(--magenta-20); color: var(--g800); }
 .caption { font-size: 12px; color: var(--muted); margin: 8px 0 0; }
 .table-wrap { max-height: 480px; overflow: auto; }
@@ -474,6 +480,7 @@ th { position: sticky; top: 0; }
 <!-- build-config.js가 만든 파일: window.KAKAO_JS_KEY (JavaScript 키만 들어간다) -->
 <script src="config.js"></script>
 <script>
+if (new URLSearchParams(location.search).has("lite")) document.documentElement.classList.add("lite");
 const MAP_LIMIT = 200;          // 지도에는 최대 200개만 표시
 const ALL_DISTRICTS = "전체 구";
 const TAG = { "24시간": "t24", "시간제한": "tlim", "정보없음": "tnone" };
